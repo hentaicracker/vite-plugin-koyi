@@ -15,25 +15,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 8
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
+          cache: npm
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: npm install
 
       - name: Build plugin
-        run: pnpm build
+        run: npm run build --workspace=packages/vite-plugin-koyi
 
       - name: Build playground
-        run: pnpm --filter playground build
+        run: npm run build --workspace=packages/playground
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
