@@ -3,13 +3,16 @@
     "private": true,
     "version": "0.0.1",
     "description": "AI-powered frontend development assistant with visual DOM context",
+    "workspaces": [
+        "packages/*"
+    ],
     "scripts": {
-        "build": "pnpm --filter vite-plugin-koyi build",
-        "build:client": "pnpm --filter vite-plugin-koyi build:client",
-        "dev": "pnpm build:client && pnpm --filter playground dev",
-        "dev:plugin": "pnpm --filter vite-plugin-koyi dev:client",
-        "playground": "pnpm --filter playground dev",
-        "typecheck": "pnpm --filter vite-plugin-koyi typecheck"
+        "build": "npm run build --workspace=packages/vite-plugin-koyi",
+        "build:client": "npm run build:client --workspace=packages/vite-plugin-koyi",
+        "dev": "npm run build:client --workspace=packages/vite-plugin-koyi && npm run dev --workspace=packages/playground",
+        "dev:plugin": "npm run dev:client --workspace=packages/vite-plugin-koyi",
+        "playground": "npm run dev --workspace=packages/playground",
+        "typecheck": "npm run typecheck --workspace=packages/vite-plugin-koyi"
     },
     "devDependencies": {
         "typescript": "^5.4.5"
