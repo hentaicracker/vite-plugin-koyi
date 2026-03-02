@@ -33,11 +33,11 @@
         "LICENSE"
     ],
     "scripts": {
-        "build": "npm run build:client && npm run build:plugin && npm run build:types",
+        "build": "pnpm build:client && pnpm build:plugin && pnpm build:types",
         "build:client": "vite build --config vite.client.config.ts",
         "build:plugin": "vite build --config vite.plugin.config.ts",
         "build:types": "tsc -p tsconfig.build.json",
-        "prepublishOnly": "npm run build",
+        "prepublishOnly": "pnpm build",
         "dev:client": "vite build --config vite.client.config.ts --watch",
         "typecheck": "tsc --noEmit"
     },
