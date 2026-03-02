@@ -16,6 +16,7 @@
  *   })
  */
 import type { Plugin, ViteDevServer, HtmlTagDescriptor } from 'vite'
+import type { Server as HttpServer } from 'http'
 import path from 'path'
 import fs from 'fs'
 import { fileURLToPath } from 'url'
@@ -138,11 +139,8 @@ export function KoyiPlugin(options: KoyiOptions = {}): Plugin[] {
           fileType,
           // Use absolute paths so the server can read the file directly
           pathType: 'absolute',
-          injectType: 'attribute',
           // Avoid transforming our own injected overlay elements
-          escapeTags: ['koyi-overlay'],
-          // Dummy port — our client uses WS, not HTTP like code-inspector
-          port: 0
+          escapeTags: ['koyi-overlay']
         })
       } catch {
         // Silently skip files that can't be parsed (e.g. non-JSX TS)
@@ -159,7 +157,7 @@ export function KoyiPlugin(options: KoyiOptions = {}): Plugin[] {
     configureServer(server: ViteDevServer) {
       if (!server.httpServer) return
 
-      new KoyiServer(server.httpServer, {
+      new KoyiServer(server.httpServer as HttpServer, {
         projectRoot,
         claudeMode,
         apiKey,

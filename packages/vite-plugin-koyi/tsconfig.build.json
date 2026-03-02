@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "./dist"
+  },
+  // Only emit declarations for the public Node.js API — skip the browser client bundle
+  "include": ["src/node", "src/shared"],
+  "exclude": ["src/client", "node_modules", "dist"]
+}

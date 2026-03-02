@@ -1,0 +1,14 @@
+# Source & config
+src/
+tsconfig*.json
+vite.*.config.ts
+*.config.ts
+
+# Dev / CI
+.github/
+.vscode/
+*.local
+
+# Misc
+*.log
+.DS_Store

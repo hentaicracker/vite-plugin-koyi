@@ -1,7 +1,21 @@
 {
     "name": "vite-plugin-koyi",
     "version": "0.1.0",
-    "description": "Vite plugin for AI-assisted frontend development with visual DOM context and Claude Code integration",
+    "description": "Vite plugin for AI-assisted frontend development — live DOM context picker + Claude Code / Anthropic API integration",
+    "keywords": [
+        "vite",
+        "vite-plugin",
+        "ai",
+        "claude",
+        "frontend",
+        "developer-tools",
+        "dom-inspector",
+        "anthropic"
+    ],
+    "license": "MIT",
+    "engines": {
+        "node": ">=18.0.0"
+    },
     "type": "module",
     "main": "./dist/index.cjs",
     "module": "./dist/index.js",
@@ -14,12 +28,16 @@
         }
     },
     "files": [
-        "dist"
+        "dist",
+        "README.md",
+        "LICENSE"
     ],
     "scripts": {
-        "build": "pnpm build:client && pnpm build:plugin",
+        "build": "pnpm build:client && pnpm build:plugin && pnpm build:types",
         "build:client": "vite build --config vite.client.config.ts",
         "build:plugin": "vite build --config vite.plugin.config.ts",
+        "build:types": "tsc -p tsconfig.build.json",
+        "prepublishOnly": "pnpm build",
         "dev:client": "vite build --config vite.client.config.ts --watch",
         "typecheck": "tsc --noEmit"
     },
