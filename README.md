@@ -4,7 +4,7 @@
 
 [中文文档](README_CN.md)
 
-![Koyi demo](koyi.gif)
+![Koyi demo](https://github.com/hentaicracker/vite-plugin-koyi/blob/main/koyi.gif?raw=true)
 
 ## Features
 

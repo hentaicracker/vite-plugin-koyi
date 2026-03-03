@@ -2,7 +2,7 @@
 
 > AI-powered frontend development assistant for Vite — select any DOM element and ask Claude to help.
 
-![Koyi demo](https://raw.githubusercontent.com/chenjunsheng/koyi/main/koyi.gif)
+![Koyi demo](https://github.com/hentaicracker/vite-plugin-koyi/blob/main/koyi.gif?raw=true)
 
 ## What it does
 

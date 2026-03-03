@@ -4,7 +4,7 @@
 
 [English](README.md)
 
-![Koyi 演示](koyi.gif)
+![Koyi 演示](https://github.com/hentaicracker/vite-plugin-koyi/blob/main/koyi.gif?raw=true)
 
 ## 核心特性
 
