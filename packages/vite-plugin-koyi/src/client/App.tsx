@@ -63,7 +63,10 @@ export function App({ config }: AppProps) {
   const [visible, setVisible] = useState(true)
   const [minimized, setMinimized] = useState(false)
   const [pickerActive, setPickerActive] = useState(false)
-  const [pendingContext, setPendingContext] = useState<DomContext | null>(null)
+  const [pendingContext, setPendingContext] = useState<{
+    ctx: DomContext
+    append: boolean
+  } | null>(null)
 
   const { panelRef, handleRef } = useDrag(getInitialPos(config.position))
 
@@ -84,9 +87,9 @@ export function App({ config }: AppProps) {
     setPickerActive(active)
   }, [])
 
-  const handleDomSelect = useCallback((ctx: DomContext) => {
-    setPickerActive(false)
-    setPendingContext(ctx)
+  const handleDomSelect = useCallback((ctx: DomContext, keepOpen?: boolean) => {
+    if (!keepOpen) setPickerActive(false)
+    setPendingContext({ ctx, append: !!keepOpen })
   }, [])
 
   const handleContextConsumed = useCallback(() => {

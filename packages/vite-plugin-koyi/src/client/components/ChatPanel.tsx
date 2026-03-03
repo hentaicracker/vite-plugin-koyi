@@ -24,7 +24,7 @@ interface ChatPanelProps {
   wsPath: string
   onPickerToggle: (active: boolean) => void
   pickerActive: boolean
-  pendingContext: DomContext | null
+  pendingContext: { ctx: DomContext; append: boolean } | null
   onContextConsumed: () => void
 }
 
@@ -82,12 +82,18 @@ export function ChatPanel({
   // Accept pending DOM context from inspector
   useEffect(() => {
     if (pendingContext) {
+      const { ctx, append } = pendingContext
       setContexts((prev) => {
-        // Deduplicate by filePath:line:col
-        const key = `${pendingContext.filePath}:${pendingContext.line}:${pendingContext.column}`
-        if (prev.some((c) => `${c.filePath}:${c.line}:${c.column}` === key))
-          return prev
-        return [...prev, pendingContext]
+        const key = `${ctx.filePath}:${ctx.line}:${ctx.column}`
+        if (append) {
+          // Ctrl+Shift multi-select: deduplicate and add
+          if (prev.some((c) => `${c.filePath}:${c.line}:${c.column}` === key))
+            return prev
+          return [...prev, ctx]
+        } else {
+          // Normal click: replace all previous contexts with the new one
+          return [ctx]
+        }
       })
       onContextConsumed()
       textareaRef.current?.focus()
@@ -250,7 +256,6 @@ export function ChatPanel({
         flexDirection: 'column',
         height: '100%',
         background: '#1a1b26',
-        borderRadius: 10,
         overflow: 'hidden',
         fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif'
       }}
