@@ -39,7 +39,8 @@ export function useWebSocket(
   const connect = useCallback(() => {
     if (unmountedRef.current) return
 
-    const url = `ws://${window.location.host}${wsPath}`
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
+    const url = `${protocol}//${window.location.host}${wsPath}`
     setStatus('connecting')
 
     const ws = new WebSocket(url)

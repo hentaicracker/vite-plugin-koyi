@@ -30,7 +30,6 @@ export function ComponentShowcase({ count, onCountChange }: Props) {
           <Button variant="secondary" onClick={() => onCountChange(0)}>
             Reset
           </Button>
-          <Button variant="ghost">Cancel</Button>
           <Button variant="primary" disabled>
             Disabled
           </Button>
@@ -135,7 +134,7 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
     <h3
       style={{
-        fontSize: 13,
+        fontSize: 14,
         fontWeight: 600,
         color: '#565f89',
         textTransform: 'uppercase',
