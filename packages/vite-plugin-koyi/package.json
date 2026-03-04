@@ -1,6 +1,6 @@
 {
     "name": "vite-plugin-koyi",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "description": "Vite plugin for AI-assisted frontend development — live DOM context picker + Claude Code / Anthropic API integration",
     "keywords": [
         "vite",
