@@ -113,12 +113,12 @@ import { KoyiPlugin } from 'vite-plugin-koyi'
 
 export default defineConfig({
   plugins: [
-    react(),
     ...KoyiPlugin({
       claudeMode: 'cli',     // or 'api'
       hotkey: 'ctrl+shift+k',
       position: { x: 'right', y: 'bottom' },
     }),
+    react(),
   ],
 })
 ```

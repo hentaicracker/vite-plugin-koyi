@@ -102,6 +102,10 @@ export function KoyiPlugin(options: KoyiOptions = {}): Plugin[] {
   let projectRoot = process.cwd()
 
   // ── Plugin 1: DOM path injection (build-time AST transform) ──────────────
+  // IMPORTANT: enforce:'pre' ensures this runs before Vite's own transforms,
+  // but within the same enforce group, array order still matters.
+  // Users MUST list KoyiPlugin() BEFORE their framework plugin (e.g. react())
+  // in their vite.config so this transform sees original JSX source.
   const transformPlugin: Plugin = {
     name: 'vite-plugin-koyi:transform',
     enforce: 'pre',

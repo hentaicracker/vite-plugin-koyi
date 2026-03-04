@@ -38,10 +38,10 @@ import { KoyiPlugin } from 'vite-plugin-koyi'
 
 export default defineConfig({
   plugins: [
-    react(),
     ...KoyiPlugin({
       claudeMode: 'cli',
-    }),
+    }), // before react()
+    react(),
   ],
 })
 ```
@@ -56,11 +56,11 @@ import { KoyiPlugin } from 'vite-plugin-koyi'
 
 export default defineConfig({
   plugins: [
-    react(),
     ...KoyiPlugin({
       claudeMode: 'api',
       apiKey: process.env.ANTHROPIC_API_KEY,
     }),
+    react(),
   ],
 })
 ```
