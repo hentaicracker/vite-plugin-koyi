@@ -118,6 +118,9 @@ export function App({ config }: AppProps) {
       {/* Floating panel */}
       <div
         ref={panelRef}
+        onKeyDown={(e) => e.stopPropagation()}
+        onKeyUp={(e) => e.stopPropagation()}
+        onKeyPress={(e) => e.stopPropagation()}
         style={{
           position: 'fixed',
           width: PANEL_WIDTH,

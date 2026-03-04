@@ -1,6 +1,6 @@
 import React from 'react'
 
-type BadgeColor = 'blue' | 'green' | 'yellow' | 'red' | 'purple'
+type BadgeColor = 'blue' | 'green' | 'yellow' | 'red' | 'purple' | 'orange'
 
 const COLOR_MAP: Record<
   BadgeColor,
@@ -30,6 +30,11 @@ const COLOR_MAP: Record<
     bg: 'rgba(187,154,247,0.12)',
     text: '#bb9af7',
     border: 'rgba(187,154,247,0.3)'
+  },
+  orange: {
+    bg: 'rgba(255,158,100,0.12)',
+    text: '#ff9e64',
+    border: 'rgba(255,158,100,0.3)'
   }
 }
 

@@ -52,6 +52,7 @@ export function ComponentShowcase({ count, onCountChange }: Props) {
           <Badge color="yellow">Pending</Badge>
           <Badge color="red">Error</Badge>
           <Badge color="purple">Beta</Badge>
+          <Badge color="orange">Pro</Badge>
         </div>
       </div>
 

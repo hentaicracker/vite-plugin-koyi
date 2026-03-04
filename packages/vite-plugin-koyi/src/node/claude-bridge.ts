@@ -50,7 +50,21 @@ Guidelines:
 - Be concise and focused on the specific element/issue
 - Always show code examples with correct language syntax highlighting
 - Reference specific file paths and line numbers when discussing code
-- Prefer modern, idiomatic patterns for the detected framework`
+- Prefer modern, idiomatic patterns for the detected framework
+
+## Code Change Reporting (IMPORTANT)
+Whenever you make or suggest any file modifications, you MUST display every changed file in the Koyi panel using the following format so the user can review what is being modified:
+
+\`\`\`diff
+// filepath: <relative/path/to/file>
+- removed line
++ added line
+  unchanged context line
+\`\`\`
+
+If you apply multiple files, repeat the diff block for each file.
+After the diff(s), briefly summarize in one or two sentences what was changed and why.
+Never silently modify files without showing the diff in your response.`
 
 export class ClaudeBridge {
   private client?: Anthropic
