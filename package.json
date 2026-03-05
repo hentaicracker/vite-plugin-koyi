@@ -9,7 +9,8 @@
         "dev": "pnpm build:client && pnpm --filter playground dev",
         "dev:plugin": "pnpm --filter vite-plugin-koyi dev:client",
         "playground": "pnpm --filter playground dev",
-        "typecheck": "pnpm --filter vite-plugin-koyi typecheck"
+        "typecheck": "pnpm --filter vite-plugin-koyi typecheck",
+        "release": "pnpm --filter vite-plugin-koyi build && cd packages/vite-plugin-koyi && npm version patch && npm publish --access public --registry https://registry.npmjs.org/"
     },
     "devDependencies": {
         "typescript": "^5.4.5"
