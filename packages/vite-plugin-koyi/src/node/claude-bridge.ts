@@ -283,11 +283,17 @@ export class ClaudeBridge {
           )
           fs.writeFileSync(tempPath, Buffer.from(img.base64, 'base64'))
           tempImageFiles.push(tempPath)
-          cliArgs.push('--image', tempPath)
         }
       }
 
       // ── Build prompt ───────────────────────────────────────────────────
+      // Build image reference section to embed in the prompt (CLI has no --image flag)
+      const imageSection =
+        tempImageFiles.length > 0
+          ? '\n\n## Attached Images\n\n' +
+            tempImageFiles.map((p, i) => `Image ${i + 1}: ${p}`).join('\n')
+          : ''
+
       let prompt: string
       if (this.cliSessionId) {
         // Resuming: only send the new user message.
@@ -299,14 +305,14 @@ export class ClaudeBridge {
             '---'
           )
         }
-        parts.push(userContent)
+        parts.push(userContent + imageSection)
         prompt = parts.join('\n\n')
       } else {
         // Fresh session: include full system prompt + user request
         const systemSection = this.buildSystemPrompt(systemContext)
         prompt = [
           systemSection,
-          `---\n\n## User Request\n\n${userContent}`
+          `---\n\n## User Request\n\n${userContent}${imageSection}`
         ].join('\n\n')
       }
 
