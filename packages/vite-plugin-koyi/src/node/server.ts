@@ -93,6 +93,13 @@ export class KoyiServer {
             () => send({ type: 'stream_end', messageId })
           )
         } catch (err: unknown) {
+          // AbortError is thrown by the Anthropic SDK when abort() is called
+          // intentionally by the user — don't surface it as an error in the UI.
+          const isAbort =
+            err instanceof Error &&
+            (err.name === 'AbortError' ||
+              err.message.toLowerCase().includes('aborted'))
+          if (isAbort) return
           const message = err instanceof Error ? err.message : String(err)
           console.error('[koyi] Bridge error:', message)
           send({ type: 'stream_error', messageId, error: message })

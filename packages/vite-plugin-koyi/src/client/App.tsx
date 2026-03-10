@@ -27,7 +27,7 @@ interface AppProps {
   config: KoyiConfig
 }
 
-const PANEL_WIDTH = 380
+const PANEL_WIDTH = 390
 const PANEL_HEIGHT = 560
 const EDGE_GAP = 16
 
@@ -63,6 +63,7 @@ export function App({ config }: AppProps) {
   const [visible, setVisible] = useState(true)
   const [minimized, setMinimized] = useState(false)
   const [pickerActive, setPickerActive] = useState(false)
+  const [locatorActive, setLocatorActive] = useState(false)
   const [pendingContext, setPendingContext] = useState<{
     ctx: DomContext
     append: boolean
@@ -85,6 +86,19 @@ export function App({ config }: AppProps) {
 
   const handlePickerToggle = useCallback((active: boolean) => {
     setPickerActive(active)
+    if (active) setLocatorActive(false)
+  }, [])
+
+  const handleLocatorToggle = useCallback((active: boolean) => {
+    setLocatorActive(active)
+    if (active) setPickerActive(false)
+  }, [])
+
+  const handleLocatorSelect = useCallback((ctx: DomContext) => {
+    setLocatorActive(false)
+    if (ctx.filePath) {
+      window.open(`vscode://file/${ctx.filePath}:${ctx.line}:${ctx.column}`)
+    }
   }, [])
 
   const handleDomSelect = useCallback((ctx: DomContext, keepOpen?: boolean) => {
@@ -110,9 +124,13 @@ export function App({ config }: AppProps) {
 
       {/* DOM Inspector (transparent full-page overlay) */}
       <DomInspector
-        active={pickerActive}
-        onSelect={handleDomSelect}
-        onCancel={() => setPickerActive(false)}
+        active={pickerActive || locatorActive}
+        mode={locatorActive ? 'locate' : 'context'}
+        onSelect={locatorActive ? handleLocatorSelect : handleDomSelect}
+        onCancel={() => {
+          setPickerActive(false)
+          setLocatorActive(false)
+        }}
       />
 
       {/* Floating panel */}
@@ -198,6 +216,8 @@ export function App({ config }: AppProps) {
               pickerActive={pickerActive}
               pendingContext={pendingContext}
               onContextConsumed={handleContextConsumed}
+              locatorActive={locatorActive}
+              onLocatorToggle={handleLocatorToggle}
             />
           </div>
         )}

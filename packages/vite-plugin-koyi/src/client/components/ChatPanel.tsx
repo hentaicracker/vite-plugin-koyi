@@ -26,6 +26,8 @@ interface ChatPanelProps {
   pickerActive: boolean
   pendingContext: { ctx: DomContext; append: boolean } | null
   onContextConsumed: () => void
+  locatorActive: boolean
+  onLocatorToggle: (active: boolean) => void
 }
 
 const SESSION_KEY = '__koyi_messages'
@@ -56,7 +58,9 @@ export function ChatPanel({
   onPickerToggle,
   pickerActive,
   pendingContext,
-  onContextConsumed
+  onContextConsumed,
+  locatorActive,
+  onLocatorToggle
 }: ChatPanelProps) {
   const [messages, setMessages] = useState<ChatMessage[]>(loadMessages)
   const [inputText, setInputText] = useState('')
@@ -232,6 +236,15 @@ export function ChatPanel({
   const removeImage = useCallback((name: string) => {
     setImages((prev) => prev.filter((img) => img.name !== name))
   }, [])
+
+  const handleStop = useCallback(() => {
+    if (!streamingId) return
+    send({ type: 'abort', messageId: streamingId })
+    setMessages((prev) =>
+      prev.map((m) => (m.id === streamingId ? { ...m, isStreaming: false } : m))
+    )
+    setStreamingId(null)
+  }, [streamingId, send])
 
   const clearHistory = () => {
     setMessages([])
@@ -459,6 +472,34 @@ export function ChatPanel({
             🎯 {pickerActive ? 'Picking…' : 'Pick Element'}
           </button>
 
+          {/* Locate to code button */}
+          <button
+            onClick={() => onLocatorToggle(!locatorActive)}
+            title={
+              locatorActive
+                ? '取消定位 (Esc)'
+                : '悬停高亮元素，点击跳转到 VS Code 对应源码'
+            }
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 4,
+              padding: '4px 9px',
+              borderRadius: 5,
+              border: `1px solid ${locatorActive ? '#e0af68' : '#414868'}`,
+              background: locatorActive
+                ? 'rgba(224,175,104,0.15)'
+                : 'transparent',
+              color: locatorActive ? '#e0af68' : '#565f89',
+              fontSize: 11,
+              cursor: 'pointer',
+              transition: 'all 0.15s',
+              fontFamily: 'inherit'
+            }}
+          >
+            📍 {locatorActive ? '定位中…' : '定位到代码'}
+          </button>
+
           {/* Image upload button */}
           <button
             onClick={() => fileInputRef.current?.click()}
@@ -542,26 +583,37 @@ export function ChatPanel({
             }
           />
           <button
-            onClick={sendMessage}
-            disabled={isDisabled || !inputText.trim()}
-            title="Send (Enter)"
+            onClick={streamingId ? handleStop : sendMessage}
+            disabled={
+              !streamingId && (status !== 'connected' || !inputText.trim())
+            }
+            title={streamingId ? 'Stop generation' : 'Send (Enter)'}
             style={{
               padding: '8px 14px',
               borderRadius: 6,
               border: 'none',
-              background:
-                isDisabled || !inputText.trim() ? '#292e42' : '#7aa2f7',
-              color: isDisabled || !inputText.trim() ? '#414868' : '#1a1b26',
-              fontSize: 13,
+              background: streamingId
+                ? '#f7768e'
+                : status !== 'connected' || !inputText.trim()
+                  ? '#292e42'
+                  : '#7aa2f7',
+              color: streamingId
+                ? '#1a1b26'
+                : status !== 'connected' || !inputText.trim()
+                  ? '#414868'
+                  : '#1a1b26',
+              fontSize: streamingId ? 11 : 13,
               fontWeight: 600,
               cursor:
-                isDisabled || !inputText.trim() ? 'not-allowed' : 'pointer',
+                !streamingId && (status !== 'connected' || !inputText.trim())
+                  ? 'not-allowed'
+                  : 'pointer',
               transition: 'all 0.15s',
               alignSelf: 'stretch',
               minWidth: 52
             }}
           >
-            ↑
+            {streamingId ? '■' : '↑'}
           </button>
         </div>
       </div>

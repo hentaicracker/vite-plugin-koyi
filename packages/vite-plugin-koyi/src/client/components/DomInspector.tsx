@@ -19,6 +19,11 @@ import type { DomContext } from '../../shared/types'
 
 interface DomInspectorProps {
   active: boolean
+  /**
+   * 'context' (default) — pick element to add as chat context.
+   * 'locate'            — click element to open its source in VS Code.
+   */
+  mode?: 'context' | 'locate'
   /** keepOpen is true when Alt+Shift was held — picker stays active for multi-select */
   onSelect: (ctx: DomContext, keepOpen?: boolean) => void
   onCancel: () => void
@@ -55,6 +60,7 @@ function findInspElement(target: Element | null): Element | null {
 
 export function DomInspector({
   active,
+  mode = 'context',
   onSelect,
   onCancel
 }: DomInspectorProps) {
@@ -71,9 +77,10 @@ export function DomInspector({
       const base = parsed
         ? `${parsed.filePath.split('/').pop()}:${parsed.line}`
         : el.tagName.toLowerCase()
+      if (mode === 'locate') return `${base}  → VSCode`
       return isMulti ? `${base}  ✚ add` : base
     },
-    []
+    [mode]
   )
 
   const updateHighlight = useCallback(
@@ -94,14 +101,20 @@ export function DomInspector({
       highlight.style.top = `${rect.top + window.scrollY}px`
       highlight.style.width = `${rect.width}px`
       highlight.style.height = `${rect.height}px`
-      // Green tint in multi-select mode, blue otherwise
-      highlight.style.borderColor = isMulti ? '#9ece6a' : '#7aa2f7'
-      highlight.style.background = isMulti
-        ? 'rgba(158,206,106,0.12)'
-        : 'rgba(122,162,247,0.12)'
+      // Orange in locate mode, green in multi-select, blue otherwise
+      const hlColor =
+        mode === 'locate' ? '#e0af68' : isMulti ? '#9ece6a' : '#7aa2f7'
+      const hlBg =
+        mode === 'locate'
+          ? 'rgba(224,175,104,0.12)'
+          : isMulti
+            ? 'rgba(158,206,106,0.12)'
+            : 'rgba(122,162,247,0.12)'
+      highlight.style.borderColor = hlColor
+      highlight.style.background = hlBg
 
       tooltip.textContent = getTooltipLabel(el, isMulti)
-      tooltip.style.color = isMulti ? '#9ece6a' : '#7aa2f7'
+      tooltip.style.color = hlColor
       tooltip.style.display = 'block'
       // Position tooltip above the element or below if near the top
       const tipTop = rect.top + window.scrollY - 28
@@ -168,12 +181,14 @@ export function DomInspector({
       // Use isMultiRef.current rather than e.altKey&&e.shiftKey — on macOS the
       // browser may consume the Alt key before the click event fires, making
       // the modifier flags unreliable on the MouseEvent.
-      const keepOpen = isMultiRef.current
+      // locate mode never keeps the picker open (no multi-select).
+      const keepOpen = mode !== 'locate' && isMultiRef.current
       onSelect(ctx, keepOpen)
     }
 
     /** Sync modifier state and refresh highlight colour/tooltip when it changes */
     const syncModifier = (e: KeyboardEvent | MouseEvent) => {
+      if (mode === 'locate') return // no multi-select in locate mode
       const next = e.altKey && e.shiftKey
       if (next !== isMultiRef.current) {
         isMultiRef.current = next
@@ -203,7 +218,7 @@ export function DomInspector({
       window.removeEventListener('keyup', handleKeyUp)
       updateHighlight(null)
     }
-  }, [active, onSelect, onCancel, updateHighlight])
+  }, [active, mode, onSelect, onCancel, updateHighlight])
 
   if (!active) return null
 
