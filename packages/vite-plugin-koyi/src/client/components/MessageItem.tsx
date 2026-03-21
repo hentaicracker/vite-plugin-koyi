@@ -32,7 +32,8 @@ const mdComponents: React.ComponentProps<typeof ReactMarkdown>['components'] = {
           style={{
             margin: '8px 0',
             borderRadius: 6,
-            overflow: 'hidden',
+            overflowX: 'auto',
+            overflowY: 'hidden',
             fontSize: 12
           }}
         >
@@ -269,6 +270,7 @@ export function MessageItem({ message }: MessageItemProps) {
       <div
         style={{
           maxWidth: '90%',
+          minWidth: 0,
           padding: '9px 12px',
           borderRadius: isUser ? '12px 12px 3px 12px' : '3px 12px 12px 12px',
           background: isUser ? '#292e42' : '#1e2030',
@@ -276,7 +278,9 @@ export function MessageItem({ message }: MessageItemProps) {
           color: '#c0caf5',
           fontSize: 13,
           lineHeight: 1.55,
-          fontFamily: 'ui-sans-serif, system-ui, sans-serif'
+          fontFamily: 'ui-sans-serif, system-ui, sans-serif',
+          overflow: 'hidden',
+          overflowX: 'auto'
         }}
       >
         {isUser ? (

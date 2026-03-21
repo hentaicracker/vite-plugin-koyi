@@ -9,7 +9,8 @@
       "Bash(pnpm install:*)",
       "Bash(pnpm --filter @ai-dev/shared run build:*)",
       "Bash(pnpm --filter @ai-dev/plugin run build:*)",
-      "Bash(pnpm --filter @ai-dev/client run build:*)"
+      "Bash(pnpm --filter @ai-dev/client run build:*)",
+      "Bash(npx tsc:*)"
     ]
   }
 }
